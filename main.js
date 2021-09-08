@@ -34,15 +34,19 @@
         this.board.bars.push(this);
         //dibujar las cosas
         this.kind = "rectangle";  
+        this.speed = 10;
         
     }
     //moverlo
     self.Bar .prototype = {
         down: function (){
-
+            this.y += this.speed;
         },
         up: function(){
-
+            this.y -= this.speed;
+        },
+        toString: function(){
+            return "x: " + this.x + "y: "+ this.y;
         }
     }
 
@@ -81,7 +85,16 @@
     }
 
 })();
-
+document.addEventListener ("keydown",function (ev){
+    
+    if (ev.keyCode == 38) {
+        bar.up ();
+    }
+    else if (ev.keyCode== 40 ) {
+        bar.down ();
+    }
+    console.log(""+bar);
+});
 window.addEventListener("load",main);
 
 //funcion que va a ejecutar todos los elementos
