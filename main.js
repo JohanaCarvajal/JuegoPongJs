@@ -22,7 +22,18 @@
     }
 
 })(); 
-
+(function(){
+    self.Ball = function(x,y,radius,board){
+        this.x=x;
+        this.y=y;
+        this.radius = radius;
+        this.speed_y=0;
+        this.speed_x=3;
+        this.board = board;
+        board.ball = this;
+        this.kind = "circle";
+    }
+})();
 
 (function(){
     self.Bar = function (x,y,width,height,board){
