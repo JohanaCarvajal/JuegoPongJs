@@ -175,6 +175,7 @@
                   
             switch(element.kind){
                 case "rectangle":
+                    ctx.fillStyle = "yellow";
                     ctx.fillRect (element.x,element.y,element.width,element.height);
                     break;
                 case "circle":
