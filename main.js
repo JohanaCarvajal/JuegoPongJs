@@ -32,28 +32,23 @@
         this.speed_x=3;
         this.board = board;
         this.direction = -1 ;
-        this.bounce_angle = 0;
-		this.max_bounce_angle = Math.PI / 12;
+        this.bounce_angle = 0; //ángulo de rebote
+		this.max_bounce_angle = Math.PI / 12;  // angulo máximo en que la pelota puede salir disparada
 		this.speed = 3;
 
         board.ball = this;
         this.kind = "circle";       
-    }
+    };
 
     self.Ball.prototype = {
 		move: function(){
 			this.x += (this.speed_x * this.direction);
 			this.y += (this.speed_y);
 		},
-		get width(){
-			return this.radius * 2;
-		},
-		get height(){
-			return this.radius * 2;
-		},
-		collision: function(bar){
+        collision: function(bar){
 
 			//Reacciona a la colisión con una barra que recibe como parámetro
+            //Calcula el ancho en el que va a moverse la pelota
 			var relative_intersect_y = ( bar.y + (bar.height / 2) ) - this.y;
 
 			var normalized_intersect_y = relative_intersect_y / (bar.height / 2);
@@ -63,9 +58,16 @@
 			this.speed_y = this.speed * -Math.sin(this.bounce_angle);
 			this.speed_x = this.speed * Math.cos(this.bounce_angle);
 
-			if(this.x > (this.board.width / 2)) this.direction = -1;
+			if(this.x > (this.board.width / 2)) this.direction = -1; // Calcula la dirección de la pelota
 			else this.direction = 1;
 		}
+
+		//get width(){
+		//	return this.radius * 2;
+		//},
+		//get height(){
+		//	return this.radius * 2;
+		//},	
 	}
 })();
 
@@ -76,6 +78,7 @@
 		this.width = width;
 		this.height = height;
 		this.board = board;
+        //  Ingreso al board, luego al arreglo bars y le adiciono con push todo este objeto, esta barra
 		this.board.bars.push(this);
 		this.kind = "rectangle";
 		this.speed = 5;
@@ -92,7 +95,7 @@
 		toString: function(){
 			return "x: "+ this.x +" y: "+ this.y ;
 		}
-	}
+	};
 
 })();
 
@@ -107,8 +110,8 @@
 
     self.BoardView.prototype = {
         //borra fillRect, lo va reiniciando
-        clean: function(){
-            this.ctx.clearRect(0,0,this.board.witdh,this.board.height); 
+        clean: function(){            
+            this.ctx.clearRect(0,0,this.board.width, this.board.height); 
         },
 
         draw: function (){
@@ -123,7 +126,7 @@
             for (var i = this.board.bars.length -1; i>=0; i--){
                 var bar = this.board.bars[i];
                 // valida la colisión de cualquier elemento
-                if (hit(bar,this.board.ball)){
+                if (hit(bar, this.board.ball)){
                     this.board.ball.collision (bar);
                 }
             };
@@ -165,7 +168,8 @@
     }
 
     function draw (ctx,element){
-            //hasOwnProperty Me dice si el objeto tiene una propiedad kind       
+            //hasOwnProperty Me dice si el objeto tiene una propiedad kind 
+                  
             switch(element.kind){
                 case "rectangle":
                     ctx.fillRect (element.x,element.y,element.width,element.height);
@@ -177,9 +181,7 @@
                     ctx.closePath();
                     break;  
                        
-            }    
-
-             
+            }               
     }
 
 })();
@@ -190,6 +192,7 @@ var bar_2 = new Bar(735,100,40,100,board);
 var canvas = document.getElementById('canvas');
 var board_view = new BoardView(canvas,board);
 var ball = new Ball(350, 100, 10,board);
+
 
 
 document.addEventListener("keydown",function(ev){
@@ -211,8 +214,8 @@ document.addEventListener("keydown",function(ev){
 		bar_2.down();
 	}else if(ev.keyCode === 32){
 		ev.preventDefault();
-		board.playing = !board.playing;
-	}
+		board.playing = !board.playing; // si está verdadero, lo asigna a falso
+	};
 });
 
 //window.addEventListener("load",main);
@@ -221,11 +224,11 @@ document.addEventListener("keydown",function(ev){
 board_view.draw();
 window.requestAnimationFrame(controller);
 
-//setTimeout (function (){
-   // ball.direction = -1;
-//},4000);
-
 function controller (){
     board_view.play();    
     requestAnimationFrame(controller);
 }
+
+
+
+
