@@ -38,13 +38,20 @@
 
         board.ball = this;
         this.kind = "circle";       
-    };
+    }
 
     self.Ball.prototype = {
 		move: function(){
 			this.x += (this.speed_x * this.direction);
 			this.y += (this.speed_y);
 		},
+        get width(){
+			return this.radius * 2; //devuelve el diámetro
+		},
+		get height(){
+			return this.radius * 2;
+		},	
+
         collision: function(bar){
 
 			//Reacciona a la colisión con una barra que recibe como parámetro
@@ -61,13 +68,7 @@
 			if(this.x > (this.board.width / 2)) this.direction = -1; // Calcula la dirección de la pelota
 			else this.direction = 1;
 		}
-
-		//get width(){
-		//	return this.radius * 2;
-		//},
-		//get height(){
-		//	return this.radius * 2;
-		//},	
+		
 	}
 })();
 
@@ -136,12 +137,14 @@
             if (this.board.playing){
                 this.clean();
                 this.draw();
+                this.check_collisions();
                 this.board.ball.move();
             }            
         }       
     }
 
     function hit (a,b){
+        
         //Revisa si a colisiona con b
 		var hit = false;
 		//Colsiones horizontales
